@@ -156,7 +156,14 @@
         [results setValue:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"] forKey:@"appVersion"];
 
         // Check what Notifications the user has turned on.  We registered for all three, but they may have manually disabled some or all of them.
-        NSUInteger rntypes = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+        //NSUInteger rntypes = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+        NSUInteger rntypes;
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] < 8.0) {
+            rntypes = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
+        }else{
+            rntypes = [[[UIApplication sharedApplication] currentUserNotificationSettings] types];
+        }
+
 
         // Set the defaults to disabled unless we find otherwise...
         NSString *pushBadge = @"disabled";
